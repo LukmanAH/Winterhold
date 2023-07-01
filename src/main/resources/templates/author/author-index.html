@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+    <div class="grid-container">
+<!--        <div class="search-container">-->
+            <fieldset class="search-container">
+                <legend> Search By </legend>
+                <form class="filter" th:attr="action=@{/author/index}" method="get">
+                    <label>Name</label>
+                    <input type="text" placeholder="Author Name..." name="name" th:value=${name}>
+                    <button type="submit" class="button blue-button">Search</button>
+                </form>
+            </fieldset>
+<!--        </div>-->
+
+        <a class="button green-button create-button" th:href="@{/author/upsertForm}">Insert New Author</a>
+
+        <table>
+            <thead>
+            <tr>
+                <td></td>
+                <th>Full Name</th>
+                <th>Age</th>
+                <th>Status</th>
+                <th>Education</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="dataRow : ${dataTable}" th:object="${dataRow}">
+                <td>
+                    <a class="button green-button" th:href="@{/author/detail(id=*{id})}">Books</a>
+                    <a class="button blue-button" th:href="@{/author/upsertForm(id=*{id})}"> Edit </a>
+                    <a class="button red-button" th:href="@{/author/delete(id=*{id})}">Delete</a>
+                </td>
+                <td th:text="*{fullName}"></td>
+                <td th:text="*{age}"></td>
+                <td th:text="*{status}"></td>
+                <td th:text="*{education}"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="6">
+                    <div class="pagination" th:if="${totalPages!=0}">
+                        <div th:text="|Page ${currentPage} of ${totalPages}|"></div>
+                        <div>
+                            <a  th:each="loop:${#numbers.sequence(1, totalPages)}"
+                                th:href="@{/author/index(page=${loop}, name=${name})}" th:text="${loop}"></a>
+                        </div>
+                    </div>
+                    <div class="pagination" th:if="${totalPages==0}">
+                        Data Tidak Ditemukan
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</main>
+</body>
+</html>

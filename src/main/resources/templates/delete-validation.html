@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+    <div class="delete-validation-container">
+        <H1>Tidak dapat menghapus <span th:text="${entity}"></span></H1>
+        <p> <span th:text="${entity}"></span> masih memiliki keterikatan dengan <span th:text="${totalDependent}"></span> <span th:text="${otherEntity}"></span></p>
+        <a th:href="${pageIndex}" class="button blue-button">Back to <span th:text="${entity}"></span> index</a>
+    </div>
+</main>
+</body>
+</html>

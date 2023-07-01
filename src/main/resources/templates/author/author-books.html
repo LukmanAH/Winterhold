@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+    <div class="grid-container">
+
+        <a class="button blue-button" th:href="@{/author/index}">Back to Author index</a>
+        <div class="headerDTO-wrapper">
+            <div>
+                <p>Name</p>
+                <p>Birth Date</p>
+                <p>Deceased Date</p>
+                <p>Education</p>
+                <p>Summary</p>
+            </div>
+            <div th:object="${header}">
+                <p th:text="*{fullName}"></p>
+                <p th:text="*{birthDate}"></p>
+                <p th:text="*{deceasedDate}"></p>
+                <p th:text="*{education}"></p>
+                <p th:text="*{summary}"></p>
+            </div>
+        </div>
+
+   <table>
+       <thead>
+            <tr>
+                <th>Book Title</th>
+                <th>Category</th>
+                <th>Is Borrowed</th>
+                <th>Release Date</th>
+                <th>Total Page</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="dataRow : ${dataTable}" th:object="${dataRow}">
+                <td th:text="*{title}"></td>
+                <td th:text="*{categoryName}"></td>
+                <td th:text="*{isBorrowed}"></td>
+                <td th:text="*{releaseDate}"></td>
+                <td th:text="*{totalPage}"></td>
+            </tr>
+
+            </tbody>
+           <tfoot th:if="${dataTable.size() == 0}">
+               <tr>
+                   <td colspan="5">
+                       <div class="center-row">
+                           <h3>No book found</h3>
+                       </div>
+                   </td>
+               </tr>
+           </tfoot>
+        </table>
+    </div>
+
+</main>
+</body>
+</html>

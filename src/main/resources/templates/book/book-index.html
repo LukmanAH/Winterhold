@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+    <div class="grid-container">
+        <!--        <div class="search-container">-->
+        <fieldset class="search-container">
+            <legend> Search By </legend>
+            <form class="filter" th:attr="action=@{/book/index}" method="get">
+                <label>Name</label>
+                <input type="text" placeholder="Category Name..." name="categoryName" th:value=${categoryName}>
+                <button type="submit" class="button blue-button">Search</button>
+            </form>
+        </fieldset>
+        <!--        </div>-->
+
+        <a class="button green-button create-button" th:href="@{/book/upsertForm}">Insert New Category</a>
+
+        <table>
+            <thead>
+            <tr>
+                <td></td>
+                <th>Category</th>
+                <th>Floor</th>
+                <th>Isle</th>
+                <th>Bay</th>
+                <th>Total Books</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="dataRow : ${dataTable}" th:object="${dataRow}">
+                <td>
+                    <a class="button green-button" th:href="@{/book/detail(name=*{name})}">Books</a>
+                    <a class="button blue-button" th:href="@{/book/upsertForm(name=*{name})}"> Edit </a>
+                    <a class="button red-button" th:href="@{/book/delete(name=*{name})}">Delete</a>
+                </td>
+                <td th:text="*{name}"></td>
+                <td th:text="*{floor}"></td>
+                <td th:text="*{isle}"></td>
+                <td th:text="*{bay}"></td>
+                <td th:text="*{totalBook}"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="5">
+                    <div class="pagination" th:if="${totalPages!=0}">
+                        <div th:text="|Page ${currentPage} of ${totalPages}|"></div>
+                        <div>
+                            <a  th:each="loop:${#numbers.sequence(1, totalPages)}"
+                                th:href="@{/book/index(page=${loop}, name=${name})}" th:text="${loop}"></a>
+                        </div>
+                    </div>
+                    <div class="pagination" th:if="${totalPages==0}">
+                        Data Tidak Ditemukan
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</main>
+</body>
+</html>

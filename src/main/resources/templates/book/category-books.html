@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+    <div class="grid-container">
+
+        <fieldset class="search-container">
+            <legend> Search By </legend>
+            <form th:attr="action=@{/book/detail }" method="get">
+                <input type="hidden" name="name" th:value=${name}>
+                <div class="filter">
+                    <label>Title</label>
+                    <input type="text" placeholder="Title..." name="title" th:value=${title}>
+                </div>
+                <div class="filter">
+                    <label>Author</label>
+                    <input type="text" placeholder="Author..." name="author" th:value=${author}>
+
+                </div>
+
+                <button type="submit" class="button blue-button">Search</button>
+            </form>
+        </fieldset>
+        <h1>List of <span th:text="${name}"></span> book</h1>
+        <a class="button green-button create-button" th:href="@{/book/upsertForm}">Insert New <span th:text="${name}"></span> Book</a>
+   <table>
+       <thead>
+            <tr>
+                <th></th>
+                <th>Book Title</th>
+                <th>Author Name</th>
+                <th>Is Borrowed</th>
+                <th>Release Date</th>
+                <th>Total Page</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="dataRow : ${dataTable}" th:object="${dataRow}">
+                <td>
+                    <a class="button blue-button" th:href="@{/book/upsertFormDetail(code=*{code})}"> Edit </a>
+                    <a class="button red-button" th:href="@{/book/deleteDetail(code=*{code})}">Delete</a>
+                </td>
+                <td th:text="*{title}"></td>
+                <td th:text="*{authorName}"></td>
+                <td th:text="*{isBorrowed}"></td>
+                <td th:text="*{releaseDate}"></td>
+                <td th:text="*{totalPage}"></td>
+            </tr>
+            </tbody>
+
+       <tfoot th:if="${dataTable.size() == 0}">
+           <tr>
+               <td colspan="6">
+                   <div class="center-row">
+                       <h3>No <span th:text="${name}"></span> book found</h3>
+                   </div>
+               </td>
+           </tr>
+       </tfoot>
+        </table>
+    </div>
+
+</main>
+</body>
+</html>
