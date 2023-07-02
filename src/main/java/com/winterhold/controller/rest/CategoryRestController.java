@@ -1,6 +1,8 @@
 package com.winterhold.controller.rest;
 
 import com.winterhold.dto.book.BookByCategoryFilterDTO;
+import com.winterhold.dto.book.InsertBookDTO;
+import com.winterhold.dto.book.UpdateBookDTO;
 import com.winterhold.dto.category.CategoryFilterDTO;
 import com.winterhold.dto.category.InsertCategoryDTO;
 import com.winterhold.dto.category.UpdateCategoryDTO;
@@ -20,21 +22,21 @@ public class CategoryRestController {
     CategoryService service;
 
     @GetMapping
-    public ResponseEntity<Object> get(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue="") String name){
+    public ResponseEntity<Object> getAll(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue="") String name){
         try {
-            var hasilQuery = service.getAll( page, new CategoryFilterDTO(name));
-            return MapperHelper.getResponse(hasilQuery,200);
+            var queryResult = service.getAll( page, new CategoryFilterDTO(name));
+            return MapperHelper.getResponse(queryResult,200);
         }catch (Exception exception){
             return MapperHelper.getError(exception.getMessage(), 500);
         }
     }
 
     @GetMapping("/{name}")
-    public ResponseEntity<Object> get(@PathVariable String name){ //Action Method
+    public ResponseEntity<Object> getSingle(@PathVariable String name){
         try {
-            var hasilQuery = service.getSingle(name);
-            if(hasilQuery != null){
-                return MapperHelper.getResponse(hasilQuery,200);
+            var queryResult = service.getSingle(name);
+            if(queryResult != null){
+                return MapperHelper.getResponse(queryResult,200);
             }
             return MapperHelper.getError("Category not found", 400);
         }catch (Exception exception){
@@ -59,14 +61,15 @@ public class CategoryRestController {
     @PutMapping("{name}")
     public ResponseEntity<Object> put(@PathVariable String name, @Valid @RequestBody UpdateCategoryDTO dto, BindingResult bindingResult){
         try {
-            if(!bindingResult.hasErrors()){
-                if(service.getSingle(name) == null){
-                    return MapperHelper.getError("Author not found", 400);
-                }
-                var updatedData = service.save(dto);
-                return MapperHelper.getResponse(updatedData, 201);
+            if(bindingResult.hasErrors()){
+                return MapperHelper.getErrors(bindingResult.getAllErrors(), 422);
             }
-            return MapperHelper.getErrors(bindingResult.getAllErrors(), 422);
+
+            if(!service.isExist(name)){
+                return MapperHelper.getError("Category not found", 400);
+            }
+            var updatedData = service.save(dto);
+            return MapperHelper.getResponse(updatedData, 201);
         }catch (Exception exception){
             return MapperHelper.getError(exception.getMessage(), 500);
         }
@@ -82,20 +85,80 @@ public class CategoryRestController {
     }
 
     @GetMapping("/{name}/books")
-    public ResponseEntity<Object> getBooks(@PathVariable String name,
+    public ResponseEntity<Object> getAllBooks(@PathVariable String name,
                                            @RequestParam(defaultValue="") String authorName,
                                            @RequestParam(defaultValue="") String title
                                 ){
         try {
-            if(service.getSingle(name) == null){
-                return MapperHelper.getError("Author not found", 400);
+            if(service.isExist(name)){
+                var queryResult = service.getBooksByCategoryName(name, new BookByCategoryFilterDTO(authorName, title));
+                return MapperHelper.getResponse(queryResult,200);
             }
-            var hasilQuery = service.getBooksByCategoryName(name, new BookByCategoryFilterDTO(authorName, title));
-            return MapperHelper.getResponse(hasilQuery,200);
+            return MapperHelper.getError("Category not found", 400);
+
         }catch (Exception exception){
             return MapperHelper.getError(exception.getMessage(), 500);
         }
 
+    }
+
+    @GetMapping("/{name}/books/{code}")
+    public ResponseEntity<Object> getSingleBook(@PathVariable String name, @PathVariable String code){ //Action Method
+        try {
+            if(!service.isExist(name)){
+                return MapperHelper.getError("Category not found", 400);
+            }
+
+            var queryResult = service.getSingleBook(code);
+            if(queryResult == null){
+                return MapperHelper.getError("Book not found", 400);
+            }
+
+            return MapperHelper.getResponse(queryResult,200);
+        }catch (Exception exception){
+            return MapperHelper.getResponse(exception.getMessage(), 500);
+        }
+
+    }
+
+    @PostMapping("/{name}/books")
+    public ResponseEntity<Object> postBook(@PathVariable String name, @Valid @RequestBody InsertBookDTO dto, BindingResult bindingResult){
+        try {
+            if(bindingResult.hasErrors()){
+                return MapperHelper.getErrors(bindingResult.getAllErrors(), 422);
+            }
+
+            if(!service.isExist(name)){
+                return MapperHelper.getError("Category not found", 400);
+            }
+
+            var insertedData = service.saveBook(dto);
+            return MapperHelper.getResponse(insertedData, 201);
+        }catch (Exception exception){
+            return MapperHelper.getError(exception.getMessage(), 500);
+        }
+    }
+
+    @PutMapping("/{name}/books/{code}")
+    public ResponseEntity<Object> putBook(@PathVariable String name, @PathVariable String code, @Valid @RequestBody UpdateBookDTO dto, BindingResult bindingResult){
+        try {
+            if(bindingResult.hasErrors()){
+                return MapperHelper.getErrors(bindingResult.getAllErrors(), 422);
+            }
+
+            if(!service.isExist(name)){
+                return MapperHelper.getError("Category not found", 400);
+            }
+
+            if(!service.isExistBook(code)){
+                return MapperHelper.getError("Book not found", 400);
+            }
+
+            var updatedData = service.saveBook(dto);
+            return MapperHelper.getResponse(updatedData, 201);
+        }catch (Exception exception){
+            return MapperHelper.getError(exception.getMessage(), 500);
+        }
     }
 
 

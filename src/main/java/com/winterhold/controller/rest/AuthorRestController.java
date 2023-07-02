@@ -2,7 +2,6 @@ package com.winterhold.controller.rest;
 
 
 import com.winterhold.dto.author.AuthorFilterDTO;
-import com.winterhold.dto.author.UpdateAuthorDTO;
 import com.winterhold.dto.author.UpsertAuthorDTO;
 import com.winterhold.sevice.implementation.AuthorService;
 import com.winterhold.utility.MapperHelper;
@@ -23,8 +22,8 @@ public class AuthorRestController {
     @GetMapping
     public ResponseEntity<Object> get(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue="") String name){
         try {
-            var hasilQuery = service.getAll( page, new AuthorFilterDTO(name));
-            return MapperHelper.getResponse(hasilQuery,200);
+            var queryResult = service.getAll( page, new AuthorFilterDTO(name));
+            return MapperHelper.getResponse(queryResult,200);
         }catch (Exception exception){
             return MapperHelper.getError(exception.getMessage(), 500);
         }
@@ -33,9 +32,9 @@ public class AuthorRestController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> get(@PathVariable Long id){ //Action Method
         try {
-            var hasilQuery = service.getSingle(id);
-            if(hasilQuery != null){
-                return MapperHelper.getResponse(hasilQuery,200);
+            var queryResult = service.getSingle(id);
+            if(queryResult != null){
+                return MapperHelper.getResponse(queryResult,200);
             }
             return MapperHelper.getError("Author not found", 400);
         }catch (Exception exception){
@@ -61,12 +60,12 @@ public class AuthorRestController {
     public ResponseEntity<Object> put(@PathVariable Long id, @Valid @RequestBody UpsertAuthorDTO dto, BindingResult bindingResult){
         try {
             if(!bindingResult.hasErrors()){
-                if(service.getSingle(id) == null){
-                    return MapperHelper.getError("Author not found", 400);
+                if(service.isExist(id)){
+                    dto.setId(id);
+                    var updatedData = service.save(dto);
+                    return MapperHelper.getResponse(updatedData, 201);
                 }
-                dto.setId(id);
-                var updatedData = service.save(dto);
-                return MapperHelper.getResponse(updatedData, 201);
+                return MapperHelper.getError("Author not found", 400);
             }
             return MapperHelper.getErrors(bindingResult.getAllErrors(), 422);
         }catch (Exception exception){
@@ -86,11 +85,11 @@ public class AuthorRestController {
     @GetMapping("/{id}/books")
     public ResponseEntity<Object> getBooks(@PathVariable Long id){
         try {
-            if(service.getSingle(id) == null){
-                return MapperHelper.getError("Author not found", 400);
+            if(service.isExist(id)){
+                var queryResult = service.getBooksByAuthorId(id);
+                return MapperHelper.getResponse(queryResult,200);
             }
-            var hasilQuery = service.getBooksByAuthorId(id);
-            return MapperHelper.getResponse(hasilQuery,200);
+            return MapperHelper.getError("Author not found", 400);
         }catch (Exception exception){
             return MapperHelper.getError(exception.getMessage(), 500);
         }

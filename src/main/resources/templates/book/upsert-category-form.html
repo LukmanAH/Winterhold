@@ -10,9 +10,14 @@
             <tbody>
             <tr>
                 <td><label>Name</label></td>
-                <td>
+                <td th:if="${type == 'insert'}">
                     <input type="text" th:field="*{name}">
                     <div class="field-validation-error" th:errors="*{name}"></div>
+                </td>
+
+                <td th:if="${type == 'update'}">
+                    <input type="hidden" th:name="name" th:value="*{name}">
+                    <p th:text="*{name}"></p>
                 </td>
             </tr>
             <tr>

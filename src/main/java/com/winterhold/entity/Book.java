@@ -53,7 +53,7 @@ public class Book {
         this.title = title;
         this.categoryName = categoryName;
         this.authorId = authorId;
-        this.isBorrowed = isBorrowed;
+        this.isBorrowed = isBorrowed != null ? isBorrowed : false;
         this.summary = summary;
         this.releaseDate = releaseDate;
         this.totalPage = totalPage;

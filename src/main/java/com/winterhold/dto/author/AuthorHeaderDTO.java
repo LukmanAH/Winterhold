@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -37,6 +35,6 @@ public class AuthorHeaderDTO {
         this.birthDate = MapperHelper.getLocalDateField(entity, "birthDate").toString();
         this.deceasedDate = deceasedDate != null ? deceasedDate.toString() : "-";
         this.education = MapperHelper.getStringField(entity, "education");
-        this.summary = summary != null && summary != "" ? summary : "-";
+        this.summary = summary != null && !summary.equals("") ? summary : "-";
     }
 }

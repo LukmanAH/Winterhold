@@ -69,6 +69,11 @@ public class AuthorService implements CrudService {
         }
     }
 
+    @Override
+    public Boolean isExist(Object id) {
+        return authorRepository.existsById((Long)id);
+    }
+
     public List<BookByAuthorDTO> getBooksByAuthorId(Long id){
         var data = bookRepository.getBookByAuthorId(id);
         return data;
@@ -77,4 +82,5 @@ public class AuthorService implements CrudService {
     public Long totalDependentBook(Long id){
         return bookRepository.countBookByAuthorId(id);
     }
+
 }

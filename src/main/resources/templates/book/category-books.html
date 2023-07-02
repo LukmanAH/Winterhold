@@ -24,7 +24,7 @@
             </form>
         </fieldset>
         <h1>List of <span th:text="${name}"></span> book</h1>
-        <a class="button green-button create-button" th:href="@{/book/upsertForm}">Insert New <span th:text="${name}"></span> Book</a>
+        <a class="button green-button create-button" th:href="@{/book/upsertDetailForm (categoryName = ${name})}">Insert New <span th:text="${name}"></span> Book</a>
    <table>
        <thead>
             <tr>
@@ -40,7 +40,7 @@
             <tbody>
             <tr th:each="dataRow : ${dataTable}" th:object="${dataRow}">
                 <td>
-                    <a class="button blue-button" th:href="@{/book/upsertFormDetail(code=*{code})}"> Edit </a>
+                    <a class="button blue-button" th:href="@{/book/upsertDetailForm (code=*{code}, categoryName=${name})}"> Edit </a>
                     <a class="button red-button" th:href="@{/book/deleteDetail(code=*{code})}">Delete</a>
                 </td>
                 <td th:text="*{title}"></td>

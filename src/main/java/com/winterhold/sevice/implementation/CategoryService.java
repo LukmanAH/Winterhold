@@ -1,10 +1,13 @@
 package com.winterhold.sevice.implementation;
 
 
+import com.winterhold.dao.AuthorRepository;
 import com.winterhold.dao.BookRepository;
 import com.winterhold.dao.CategoryRepository;
 import com.winterhold.dto.book.BookByCategoryDTO;
 import com.winterhold.dto.category.InsertCategoryDTO;
+import com.winterhold.dto.utility.DropdownDTO;
+import com.winterhold.entity.Book;
 import com.winterhold.entity.Category;
 import com.winterhold.sevice.abstraction.CrudService;
 import com.winterhold.utility.MapperHelper;
@@ -26,6 +29,9 @@ public class CategoryService implements CrudService {
 
     @Autowired
     BookRepository bookRepository;
+
+    @Autowired
+    AuthorRepository authorRepository;
 
     private final Integer rowsInPage = 10;
 
@@ -64,12 +70,45 @@ public class CategoryService implements CrudService {
         }
     }
 
+    @Override
+    public Boolean isExist(Object id) {
+        return categoryRepository.existsById((String)id);
+    }
+
     public <T> List<BookByCategoryDTO> getBooksByCategoryName(String name, T filter){
         var authorName = MapperHelper.getStringField(filter, "authorName");
         var title = MapperHelper.getStringField(filter, "title");
-        var data = bookRepository.getBookByCategoryName(name,authorName, title);
-        return data;
+        return bookRepository.getBookByCategoryName(name,authorName, title);
     }
+
+    public Object getSingleBook(String code) {
+        var entity = bookRepository.findById(code);
+        return entity.isPresent() ? entity.get() : null;
+    }
+
+    public Object saveBook(Object dto) {
+        var entity = new Book(
+                MapperHelper.getStringField(dto, "code"),
+                MapperHelper.getStringField(dto, "title"),
+                MapperHelper.getStringField(dto, "categoryName"),
+                MapperHelper.getLongField(dto, "authorId"),
+                MapperHelper.getBooleanField(dto, "isBorrowed"),
+                MapperHelper.getStringField(dto, "summary"),
+                MapperHelper.getLocalDateField(dto, "releaseDate"),
+                MapperHelper.getIntegerField(dto, "totalPage")
+        );
+        return bookRepository.save(entity);
+    }
+
+    public Boolean deleteBook(String code) {
+        try{
+            bookRepository.deleteById(code);
+            return true;
+        }catch (Exception exception){
+            return false;
+        }
+    }
+
 
     public Integer totalDependentBook(String categoryName){
         return bookRepository.countBookByCategoryName(categoryName);
@@ -78,5 +117,17 @@ public class CategoryService implements CrudService {
     public Boolean checkExistingCategory(String name) {
         Long totalExistingCategory = categoryRepository.countByName(name);
         return (totalExistingCategory > 0) ? true : false;
+    }
+
+    public List<DropdownDTO> getAuthorDropdownList(){
+        return authorRepository.getDropdownList();
+    }
+
+    public Boolean isExistBook(String code) {
+        return bookRepository.existsById(code);
+    }
+
+    public Boolean isExistAuthor(Long id) {
+        return authorRepository.existsById(id);
     }
 }

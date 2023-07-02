@@ -23,10 +23,10 @@ public class AuthorController {
     public String index(@RequestParam(defaultValue = "1") Integer page,
                         @RequestParam(defaultValue="") String name,
                         Model model){
-        var pageCollection = service.getAll(page, new AuthorFilterDTO(name));
-        var totalPages = pageCollection.getTotalPages();
+        var dataTable = service.getAll(page, new AuthorFilterDTO(name));
+        var totalPages = dataTable.getTotalPages();
 
-        model.addAttribute("dataTable", pageCollection);
+        model.addAttribute("dataTable", dataTable);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("currentPage", page);
         model.addAttribute("name", name);

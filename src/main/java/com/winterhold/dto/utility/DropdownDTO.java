@@ -15,12 +15,4 @@ import java.util.List;
 public class DropdownDTO {
     private Object value;
     private String text;
-
-//    public static List<DropdownDTO> getRoleDropdown(){
-//        var roleDropdown = new ArrayList<DropdownDTO>();
-//        roleDropdown.add(new DropdownDTO("Administrator", "Administrator"));
-//        roleDropdown.add(new DropdownDTO("Finance", "Finance"));
-//        roleDropdown.add(new DropdownDTO("Salesman", "Salesman"));
-//        return roleDropdown;
-//    }
 }

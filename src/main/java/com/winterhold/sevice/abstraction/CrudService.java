@@ -7,4 +7,5 @@ public interface CrudService {
     public Object getSingle(Object id);
     public Object save(Object dto);
     public Boolean delete(Object id);
+    public Boolean isExist(Object id);
 }
