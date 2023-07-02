@@ -156,4 +156,15 @@ public class BookController {
         redirectAttributes.addAttribute("name", dto.getCategoryName());
         return "redirect:/book/detail";
     }
+
+    @GetMapping("/deleteDetail")
+    public String deleteBook(@RequestParam(required = true) String code,
+                             @RequestParam(required = true) String name,
+                             RedirectAttributes redirectAttributes,
+                             Model model) {
+        service.deleteBook(code);
+
+        redirectAttributes.addAttribute("name", name);
+        return "redirect:/book/detail";
+    }
 }

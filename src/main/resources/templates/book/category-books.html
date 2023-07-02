@@ -41,7 +41,7 @@
             <tr th:each="dataRow : ${dataTable}" th:object="${dataRow}">
                 <td>
                     <a class="button blue-button" th:href="@{/book/upsertDetailForm (code=*{code}, categoryName=${name})}"> Edit </a>
-                    <a class="button red-button" th:href="@{/book/deleteDetail(code=*{code})}">Delete</a>
+                    <a class="button red-button" th:href="@{/book/deleteDetail(code=*{code}, name=${name})}">Delete</a>
                 </td>
                 <td th:text="*{title}"></td>
                 <td th:text="*{authorName}"></td>

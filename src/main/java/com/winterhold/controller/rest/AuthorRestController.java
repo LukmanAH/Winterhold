@@ -94,7 +94,4 @@ public class AuthorRestController {
             return MapperHelper.getError(exception.getMessage(), 500);
         }
     }
-
-
-
 }

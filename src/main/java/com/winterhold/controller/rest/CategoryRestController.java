@@ -161,5 +161,14 @@ public class CategoryRestController {
         }
     }
 
+    @DeleteMapping("/{name}/books/{code}")
+    public ResponseEntity<Object> deleteBook(@PathVariable String code){
+        try {
+            return MapperHelper.getResponse(service.deleteBook(code), 200);
+        }catch (Exception exception){
+            return MapperHelper.getError(exception.getMessage(), 500);
+        }
+    }
+
 
 }
