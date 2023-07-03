@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+    <div class="grid-container">
+
+        <fieldset class="search-container">
+            <legend> Search By </legend>
+            <form th:attr="action=@{/loan/index }" method="get">
+                <div class="filter">
+                    <label>Book Title</label>
+                    <input type="text" placeholder="title..." name="bookTitle" th:value="${bookTitle}">
+                </div>
+                <div class="filter">
+                    <label>Customer Name</label>
+                    <input type="text" placeholder="name..." name="customerName" th:value="${customerName}">
+                </div>
+
+                <button type="submit" class="button blue-button">Search</button>
+            </form>
+        </fieldset>
+
+        <a class="button green-button create-button" th:href="@{/loan/upsertForm}">New Loan</a>
+
+        <table>
+            <thead>
+            <tr>
+                <td></td>
+                <th>Book Title</th>
+                <th>Customer Name</th>
+                <th>Loan Date</th>
+                <th>Due Date</th>
+                <th>Return Date</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="dataRow : ${dataTable}" th:object="${dataRow}">
+                <td>
+                    <a class="button blue-button" th:href="@{/loan/detail(id=*{id})}">Detail</a>
+                    <a class="button blue-button" th:href="@{/loan/upsertForm(id=*{id})}"> Edit </a>
+                    <a class="button green-button" th:href="@{/loan/return(id=*{id})}">Return</a>
+                </td>
+                <td th:text="*{bookTitle}"></td>
+                <td th:text="*{customerName}"></td>
+                <td th:text="*{loanDate}"></td>
+                <td th:text="*{dueDate}"></td>
+                <td th:text="*{returnDate}"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="6">
+                    <div class="pagination" th:if="${totalPages!=0}">
+                        <div th:text="|Page ${currentPage} of ${totalPages}|"></div>
+                        <div>
+                            <a  th:each="loop:${#numbers.sequence(1, totalPages)}"
+                                th:href="@{/loan/index(page=${loop}, name=${name})}" th:text="${loop}"></a>
+                        </div>
+                    </div>
+                    <div class="pagination" th:if="${totalPages==0}">
+                        Data Tidak Ditemukan
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</main>
+</body>
+</html>

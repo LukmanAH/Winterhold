@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+    <div class="grid-container">
+
+        <fieldset class="search-container">
+            <legend> Search By </legend>
+            <form th:attr="action=@{/customer/index }" method="get">
+                <div class="filter">
+                    <label>Name</label>
+                    <input type="text" placeholder="name..." name="name" th:value=${name}>
+                </div>
+                <div class="filter">
+                    <label>number</label>
+                    <input type="text" placeholder="number..." name="number" th:value=${number}>
+                </div>
+
+                <button type="submit" class="button blue-button">Search</button>
+            </form>
+        </fieldset>
+
+        <a class="button green-button create-button" th:href="@{/customer/upsertForm}">Insert New Customer</a>
+
+        <table>
+            <thead>
+            <tr>
+                <td></td>
+                <th>Membership Number</th>
+                <th>Full Name</th>
+                <th>Membership Expire Date</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="dataRow : ${dataTable}" th:object="${dataRow}">
+                <td>
+                    <a class="button blue-button" th:href="@{/customer/upsertForm(membershipNumber=*{membershipNumber})}"> Edit </a>
+                    <a class="button red-button" th:href="@{/customer/delete(membershipNumber=*{membershipNumber})}">Delete</a>
+                    <a class="button green-button" th:href="@{/customer/extend(membershipNumber=*{membershipNumber})}">Extends</a>
+                </td>
+                <td><a class="context" th:href="@{/customer/context(membershipNumber=*{membershipNumber})}" th:text="*{membershipNumber}"></a></td>
+                <td th:text="*{fullName}"></td>
+                <td th:text="*{membershipExpireDate}"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="6">
+                    <div class="pagination" th:if="${totalPages!=0}">
+                        <div th:text="|Page ${currentPage} of ${totalPages}|"></div>
+                        <div>
+                            <a  th:each="loop:${#numbers.sequence(1, totalPages)}"
+                                th:href="@{/customer/index(page=${loop}, name=${name})}" th:text="${loop}"></a>
+                        </div>
+                    </div>
+                    <div class="pagination" th:if="${totalPages==0}">
+                        Data Tidak Ditemukan
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+    <div class="detail-container">
+            <div>
+            <fieldset class="search-container">
+                <legend> Book </legend>
+                <div class="detail-item-wrapper">
+                    <div>
+                        <p>Title</p>
+                        <p>Category</p>
+                        <p>Author</p>
+                        <p>Floor</p>
+                        <p>Isle</p>
+                        <p>Bay</p>
+                    </div>
+                    <div th:object="${data.book}">
+                        <p th:text="*{title}"></p>
+                        <p th:text="*{categoryName}"></p>
+                        <p>
+                            <span th:text="*{author.title}"></span>
+                            <span th:text="*{author.firstName}"></span>
+                            <span th:text="*{author.lastName}"></span>
+                        </p>
+                        <p th:text="*{category.floor}"></p>
+                        <p th:text="*{category.isle}"></p>
+                        <p th:text="*{category.bay}"></p>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="search-container">
+                <legend> Customer </legend>
+                <div class="detail-item-wrapper">
+                    <div>
+                        <p>Membership Number</p>
+                        <p>Full Name</p>
+                        <p>Phone</p>
+                        <p>Membership Expire Date</p>
+                    </div>
+                    <div th:object="${data.customer}">
+                        <p th:text="*{membershipNumber}"></p>
+                        <p>
+                            <span th:text="*{firstName}"></span>
+                            <span th:text="*{lastName}"></span>
+                        </p>
+                        <p th:text="*{phone}"></p>
+                        <p th:text="*{membershipExpireDate}"></p>
+                    </div>
+                </div>
+            </fieldse>
+            </div>
+
+            <div>
+                <a th:href="@{/loan}" class="button blue-button">Back To Index</a>
+            </div>
+    </div>
+</main>
+</body>
+</html>

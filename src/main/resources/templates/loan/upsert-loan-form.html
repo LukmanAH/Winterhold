@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+    <form th:attr="action=@{/loan/saveUpsert}"method="post" class="upsert-form" th:object="${dto}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <input type="hidden" th:field="*{id}">
+        <table>
+            <tbody>
+            <tr>
+                <td><label>Customer</label></td>
+                <td>
+                    <select th:field="*{customerNumber}">
+                        <option th:value="null">No Spesific Customer</option>
+                        <option th:each="i : ${customerDropdown}" th:value=${i.value} th:text="${i.text}" th:selected="${i==dto.customerNumber}"></option>
+                    </select>
+                    <div class="field-validation-error" th:errors="*{customerNumber}"></div>
+                </td>
+            </tr>
+            <tr>
+                <td><label>Book</label></td>
+                <td>
+                    <select th:field="*{bookCode}">
+                        <option th:value="null">No Spesific Book</option>
+                        <option th:each="i : ${bookDropdown}" th:value=${i.value} th:text="${i.text}" th:selected="${i==dto.bookCode}"></option>
+                    </select>
+                    <div class="field-validation-error" th:errors="*{bookCode}"></div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><label>Loan Date</label></td>
+                <td>
+                    <input type="date" th:field="*{loanDate}">
+                    <div class="field-validation-error" th:errors="*{loanDate}"></div>
+                </td>
+            </tr>
+
+            <tr>
+                <td><label>Note</label></td>
+                <td>
+                    <textarea th:field="*{note}"></textarea>
+                    <div class="field-validation-error" th:errors="*{note}"></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="submit" class="button blue-button">Simpan</button>
+        <a th:href="@{/loan}" class="button red-button">Back to Index</a>
+    </form>
+</main>
+</body>
+</html>

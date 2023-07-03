@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout :: head}"></head>
+<body class="main-body">
+<header th:replace="~{layout :: header}"></header>
+<main>
+  <div class="grid-container">
+    <div class="headerDTO-wrapper">
+      <div>
+        <p>Membership Number</p>
+        <p>Full Name</p>
+        <p>Birth Date</p>
+        <p>Gender/p>
+        <p>Phone</p>
+        <p>Address</p>
+      </div>
+      <div th:object="${dto}">
+        <p th:text="*{membershipNumber}"></p>
+        <p th:text="*{fullName}"></p>
+        <p th:text="*{birthDate}"></p>
+        <p th:text="*{gender}"></p>
+        <p th:text="*{phone}"></p>
+        <p th:if="*{phone==''}">-</p>
+        <p th:text="*{address}"></p>
+        <p th:if="*{address==''}">-</p>
+      </div>
+    </div>
+
+    <a class="button blue-button" th:href="@{/customer/index}">Back to Customer index</a>
+  </div>
+</main>
+</body>
+</html>

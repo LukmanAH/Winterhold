@@ -1,0 +1,15 @@
+package com.winterhold.dto.loan;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class LoanFilterDTO {
+    private String bookTitle;
+    private String customerName;
+}
