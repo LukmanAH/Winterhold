@@ -56,12 +56,11 @@ public class AuthorRestController {
         }
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<Object> put(@PathVariable Long id, @Valid @RequestBody UpsertAuthorDTO dto, BindingResult bindingResult){
+    @PutMapping
+    public ResponseEntity<Object> put(@Valid @RequestBody UpsertAuthorDTO dto, BindingResult bindingResult){
         try {
             if(!bindingResult.hasErrors()){
-                if(service.isExist(id)){
-                    dto.setId(id);
+                if(service.isExist(dto.getId())){
                     var updatedData = service.save(dto);
                     return MapperHelper.getResponse(updatedData, 201);
                 }
@@ -76,7 +75,11 @@ public class AuthorRestController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable Long id){
         try {
-            return MapperHelper.getResponse(service.delete(id), 200);
+            var totalDependent = service.totalDependentBook(id);
+            if(totalDependent == 0){
+                return MapperHelper.getResponse("Successfully deleted author", 200);
+            }
+            return MapperHelper.getError("Delete failed, Author has links to "+ totalDependent.toString() +" books", 400);
         }catch (Exception exception){
             return MapperHelper.getError(exception.getMessage(), 500);
         }

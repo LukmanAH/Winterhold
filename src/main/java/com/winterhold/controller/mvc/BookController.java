@@ -162,9 +162,20 @@ public class BookController {
                              @RequestParam(required = true) String name,
                              RedirectAttributes redirectAttributes,
                              Model model) {
-        service.deleteBook(code);
 
-        redirectAttributes.addAttribute("name", name);
-        return "redirect:/book/detail";
+        var totalDependent = service.totalDependentLoan(code);
+
+        if(totalDependent == 0){
+            service.deleteBook(code);
+            redirectAttributes.addAttribute("name", name);
+            return "redirect:/book/detail";
+        }
+
+        model.addAttribute("totalDependent", totalDependent);
+        model.addAttribute("entity", "Book");
+        model.addAttribute("otherEntity", "Loan");
+        model.addAttribute("pageIndex", "detail?name="+name);
+
+        return "delete-validation";
     }
 }

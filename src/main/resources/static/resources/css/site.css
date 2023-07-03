@@ -7,7 +7,7 @@ html {
     color: #9badd5;
     font-size: 12px;
     height: 100%;
-    background-color: #0e1122;
+    background-color: #202a45;
     font-weight: normal;
 }
 .main-body {
@@ -21,11 +21,11 @@ html {
 }
 
 .main-body > nav {
-    background-color: #131931;
+    background-color: #pink;
     grid-area: menu;
 }
 .main-body > header {
-    background-color: #0e1122;
+    background-color: #141529;
     grid-area: top;
     display: flex;
     justify-content:space-between;
@@ -161,6 +161,21 @@ html {
     justify-content: center;
 }
 
+.detail-container{
+    background-color: #202a45;
+    padding-bottom: 30px;
+}
+
+.detail-container>div{
+    display: flex;
+    font-size: 16px;
+    justify-content: center;
+}
+
+.detail-container a{
+    font-size: 12px;
+}
+
 .delete-validation-container>p,
 .home-container>p{
     width: 500px;
@@ -168,18 +183,24 @@ html {
 }
 
 .search-container{
-    border: #0e1122 solid 2px;
+    border: #9badd5 solid 2px;
     width: fit-content;
-    margin-bottom: 10px ;
+    margin: 10px ;
 }
 
+.detail-item-wrapper,
 .headerDTO-wrapper{
     display: flex;
-    width: 800px;
     align-items: flex-start;
     margin: 10px;
     margin-top: 20px;
 }
+
+.detail-item-wrapper>div{
+    margin: 20px;
+}
+
+
 .headerDTO-wrapper>div:first-child{
     flex: 1;
     margin-right:10px;
@@ -198,6 +219,8 @@ main{
     align-items: center;
     margin-right: 15px;
 }
+
+
 .grid-container table {
     width: 100%;
     text-align: left;
@@ -220,6 +243,11 @@ main{
 }
 .grid-container tbody td {
     padding: 10px;
+}
+
+.grid-container tbody .context {
+    color: #9badd5;
+    text-decoration: none;
 }
 .grid-container tbody > tr:nth-child(even) {
     background-color: #182037;
@@ -286,6 +314,13 @@ main{
 .filter {
     padding:15px;
 }
+
+.filter>label{
+    margin-right: 10px;
+ }
+
+
+
 .upsert-form {
     background-color: #202a45;
     box-sizing: border-box;
@@ -320,7 +355,7 @@ main{
 .filter [type=email],
 .filter [type=number],
 .filter [type=datetime-local] {
-    width:150px;
+    width:200px;
 }
 
 textarea {

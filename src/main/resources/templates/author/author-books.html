@@ -19,8 +19,10 @@
                 <p th:text="*{fullName}"></p>
                 <p th:text="*{birthDate}"></p>
                 <p th:text="*{deceasedDate}"></p>
+                <p th:if="*{deceasedDate==null}">-</p>
                 <p th:text="*{education}"></p>
                 <p th:text="*{summary}"></p>
+                <p th:if="*{summary=='' || summary==null}">-</p>
             </div>
         </div>
 

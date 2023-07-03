@@ -2,6 +2,7 @@ package com.winterhold.dao;
 
 import com.winterhold.dto.book.BookByAuthorDTO;
 import com.winterhold.dto.book.BookByCategoryDTO;
+import com.winterhold.dto.utility.DropdownDTO;
 import com.winterhold.entity.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -57,4 +58,11 @@ public interface BookRepository extends JpaRepository<Book, String> {
     public List<BookByCategoryDTO> getBookByCategoryName(@Param("categoryName") String categoryName,
                                                              @Param("authorName") String authorName,
                                                              @Param("title") String title);
+
+    @Query("""
+         select new com.winterhold.dto.utility.DropdownDTO(bk.code, bk.title)
+         from Book as bk
+         where bk.isBorrowed = false
+     """)
+    public List<DropdownDTO> getAvailableBookDropdownList();
 }

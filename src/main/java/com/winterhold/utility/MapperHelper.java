@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.ObjectError;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -106,7 +107,7 @@ public class MapperHelper {
     public static <T> LocalDate getLocalDateField(T object, String fieldName){
         try{
             var stringValue = getStringField(object, fieldName);
-            var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            var formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             var date = LocalDate.parse(stringValue, formatter);
             return date;
         }catch (Exception exception){
@@ -117,7 +118,7 @@ public class MapperHelper {
     public static LocalDate getLocalDateField(Object object, Integer index){
         try{
             var stringValue = getStringField(object, index);
-            var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            var formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             var date = LocalDate.parse(stringValue, formatter);
             return date;
         }catch (Exception exception){
@@ -125,25 +126,11 @@ public class MapperHelper {
         }
     }
 
-    public static void setGridViewModel(List<Object> grid, Integer page, Integer totalPages, String breadCrumbs, Model model){
-        model.addAttribute("grid", grid);
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("breadCrumbs", breadCrumbs);
+    public static String getFormatedDate(LocalDate date){
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return date.format(dateTimeFormatter);
     }
 
-    public static void setDetailGridViewModel(Object header, List<Object> grid, Integer page, Integer totalPages, String breadCrumbs, Model model){
-        setGridViewModel(grid, page, totalPages, breadCrumbs, model);
-        model.addAttribute("header", header);
-    }
-
-    public static Integer getAge(LocalDate date){
-        return date.until(LocalDate.now()).getYears();
-    }
-
-    public static String getAuthorStatus(LocalDate deceasedDate){
-        return deceasedDate == null ? "Alive" : "Deceased";
-    }
 
     public static ResponseEntity<Object> getResponse(Object data, Integer status){
         var response = new HashMap<String, Object>();

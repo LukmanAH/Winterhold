@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -13,8 +15,8 @@ import lombok.Setter;
 public class AuthorHeaderDTO {
     private Long id;
     private String fullName;
-    private String birthDate;
-    private String deceasedDate;
+    private LocalDate birthDate;
+    private LocalDate deceasedDate;
     private String education;
     private String summary;
 
@@ -28,13 +30,11 @@ public class AuthorHeaderDTO {
                     (MapperHelper.getStringField(entity, "lastName") != null? MapperHelper.getStringField(entity, "lastName") : ""));
         }
 
-        var deceasedDate = MapperHelper.getLocalDateField(entity, "deceasedDate");
-        var summary = MapperHelper.getStringField(entity, "summary");
         this.id = MapperHelper.getLongField(entity, "id");
         this.fullName = fullName;
-        this.birthDate = MapperHelper.getLocalDateField(entity, "birthDate").toString();
-        this.deceasedDate = deceasedDate != null ? deceasedDate.toString() : "-";
+        this.birthDate = MapperHelper.getLocalDateField(entity, "birthDate");
+        this.deceasedDate = MapperHelper.getLocalDateField(entity, "deceasedDate");
         this.education = MapperHelper.getStringField(entity, "education");
-        this.summary = summary != null && !summary.equals("") ? summary : "-";
+        this.summary = MapperHelper.getStringField(entity, "summary");
     }
 }

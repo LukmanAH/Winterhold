@@ -58,14 +58,14 @@ public class CategoryRestController {
         }
     }
 
-    @PutMapping("{name}")
-    public ResponseEntity<Object> put(@PathVariable String name, @Valid @RequestBody UpdateCategoryDTO dto, BindingResult bindingResult){
+    @PutMapping
+    public ResponseEntity<Object> put(@Valid @RequestBody UpdateCategoryDTO dto, BindingResult bindingResult){
         try {
             if(bindingResult.hasErrors()){
                 return MapperHelper.getErrors(bindingResult.getAllErrors(), 422);
             }
 
-            if(!service.isExist(name)){
+            if(!service.isExist(dto.getName())){
                 return MapperHelper.getError("Category not found", 400);
             }
             var updatedData = service.save(dto);
@@ -78,7 +78,12 @@ public class CategoryRestController {
     @DeleteMapping("/{name}")
     public ResponseEntity<Object> delete(@PathVariable String name){
         try {
-            return MapperHelper.getResponse(service.delete(name), 200);
+            var totalDependent = service.totalDependentBook(name);
+            if (totalDependent == 0){
+                service.delete(name);
+                return MapperHelper.getResponse( "Successfully deleted category", 200);
+            }
+            return MapperHelper.getError("Delete failed, Category has links to "+ totalDependent.toString() +" books", 400);
         }catch (Exception exception){
             return MapperHelper.getError(exception.getMessage(), 500);
         }
@@ -139,8 +144,8 @@ public class CategoryRestController {
         }
     }
 
-    @PutMapping("/{name}/books/{code}")
-    public ResponseEntity<Object> putBook(@PathVariable String name, @PathVariable String code, @Valid @RequestBody UpdateBookDTO dto, BindingResult bindingResult){
+    @PutMapping("/{name}/books")
+    public ResponseEntity<Object> putBook(@PathVariable String name, @Valid @RequestBody UpdateBookDTO dto, BindingResult bindingResult){
         try {
             if(bindingResult.hasErrors()){
                 return MapperHelper.getErrors(bindingResult.getAllErrors(), 422);
@@ -150,7 +155,7 @@ public class CategoryRestController {
                 return MapperHelper.getError("Category not found", 400);
             }
 
-            if(!service.isExistBook(code)){
+            if(!service.isExistBook(dto.getCode())){
                 return MapperHelper.getError("Book not found", 400);
             }
 
@@ -164,7 +169,13 @@ public class CategoryRestController {
     @DeleteMapping("/{name}/books/{code}")
     public ResponseEntity<Object> deleteBook(@PathVariable String code){
         try {
-            return MapperHelper.getResponse(service.deleteBook(code), 200);
+            var totalDependent = service.totalDependentLoan(code);
+
+            if(totalDependent==0){
+                service.deleteBook(code);
+                return MapperHelper.getResponse("Successfully deleted book", 200);
+            }
+            return MapperHelper.getError("Delete failed, Book has links to "+ totalDependent.toString() +" loan", 400);
         }catch (Exception exception){
             return MapperHelper.getError(exception.getMessage(), 500);
         }

@@ -15,7 +15,7 @@ public class UniqueCategoryNameValidator implements ConstraintValidator<UniqueCa
 
     @Override
     public boolean isValid(String name, ConstraintValidatorContext context) {
-        return !categoryService.checkExistingCategory(name);
+        return !categoryService.isExist(name);
     }
 
 }

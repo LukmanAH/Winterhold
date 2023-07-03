@@ -5,7 +5,7 @@
 <header th:replace="~{layout :: header}"></header>
 <main>
     <form method="post" class="upsert-form alternate-action" th:object="${dto}">
-<!--        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
         <table th:attr="data-action=${type}">
             <tbody>
             <tr>

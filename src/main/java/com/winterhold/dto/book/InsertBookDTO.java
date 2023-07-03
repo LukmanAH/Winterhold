@@ -2,6 +2,7 @@ package com.winterhold.dto.book;
 
 import com.winterhold.entity.Author;
 import com.winterhold.entity.Category;
+import com.winterhold.validation.UniqueBookCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -23,6 +24,7 @@ public class InsertBookDTO {
 
     @NotBlank(message = "Code required")
     @Size(max = 20, message = "Code max 20 char")
+    @UniqueBookCode(message = "Book code has been used")
     private String code;
 
     @NotBlank(message = "Title required")

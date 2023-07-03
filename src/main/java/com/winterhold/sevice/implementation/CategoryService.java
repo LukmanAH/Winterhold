@@ -4,6 +4,7 @@ package com.winterhold.sevice.implementation;
 import com.winterhold.dao.AuthorRepository;
 import com.winterhold.dao.BookRepository;
 import com.winterhold.dao.CategoryRepository;
+import com.winterhold.dao.LoanRepository;
 import com.winterhold.dto.book.BookByCategoryDTO;
 import com.winterhold.dto.category.InsertCategoryDTO;
 import com.winterhold.dto.utility.DropdownDTO;
@@ -32,6 +33,9 @@ public class CategoryService implements CrudService {
 
     @Autowired
     AuthorRepository authorRepository;
+
+    @Autowired
+    LoanRepository loanRepository;
 
     private final Integer rowsInPage = 10;
 
@@ -112,6 +116,10 @@ public class CategoryService implements CrudService {
 
     public Integer totalDependentBook(String categoryName){
         return bookRepository.countBookByCategoryName(categoryName);
+    }
+
+    public Integer totalDependentLoan(String code){
+        return loanRepository.countLoanByBookCode(code);
     }
 
     public Boolean checkExistingCategory(String name) {
